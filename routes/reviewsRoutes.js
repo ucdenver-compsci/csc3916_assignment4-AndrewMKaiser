@@ -29,26 +29,14 @@ function trackDimension(category, action, label, value, dimension, metric) {
     return rp(options);
 }
 
-router.get('/', function (req, res) {    if (req.query.reviews === 'true') {
-        Review.aggregate([
-            {
-                $lookup: {
-                    from: "movies", // name of the foreign collection
-                    localField: "movieId", // field in the reviews collection
-                    foreignField: "_id", // field in the movies collection
-                    as: "movieDetails" // output array where the joined movie details will be placed
-                }
-            }
-        ]).exec(function(err, reviews) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(reviews);
-            }
-        });
-    } else {
-        res.status(400).json({ success: false, message: 'Invalid query parameter.' });
-    }
+router.get('/', function (req, res) {
+    Review.find({}, function(err, reviews) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json({ success: true, reviews: reviews });
+        }
+    });
 });
 
 router.post('/', authJwtController.isAuthenticated, function(req, res) {
