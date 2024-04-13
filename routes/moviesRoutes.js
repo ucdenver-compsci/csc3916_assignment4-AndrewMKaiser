@@ -37,7 +37,7 @@ router.post('/', function(req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json({ success: true, message: 'Movie saved successfully.' });
+            res.json({ success: true, message: 'Movie saved successfully.', movie: movie });
         }
     });
 });
