@@ -69,7 +69,7 @@ router.post('/', authJwtController.isAuthenticated, function(req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json({ success: true, message: 'Review created!' });
+            res.json({ success: true, message: 'Review created!', review: review });
         }
     });
 });
