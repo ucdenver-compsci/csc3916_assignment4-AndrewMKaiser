@@ -1,5 +1,5 @@
 /*
-CSC3916 HW4
+CSC3916 HW3
 File: Server.js
 Description: Web API scaffolding for Movie API
  */
@@ -11,9 +11,9 @@ var authController = require('./auth');
 var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
-var User = require('./Users');
-var Movie = require('./Movies');
-var Review = require('./Reviews');
+var moviesRouter = require('./routes/moviesRoutes');
+var usersRouter = require('./routes/usersRoutes');
+var User = require('./models/Users');
 
 var app = express();
 app.use(cors());
@@ -87,7 +87,21 @@ router.post('/signin', function (req, res) {
     })
 });
 
+router.all('/signup', function(req, res) {
+    res.status(405).send({success: false, msg: 'Method not allowed.'});
+});
+
+router.all('/signin', function(req, res) {
+    res.status(405).send({success: false, msg: 'Method not allowed.'});
+});
+
+router.all('/', function(req, res) {
+    res.status(405).send({success: false, msg: 'Method not allowed.'});
+});
+
 app.use('/', router);
+app.use('/movies', moviesRouter);
+app.use('/users', usersRouter);
 app.listen(process.env.PORT || 8080);
 module.exports = app; // for testing only
 
