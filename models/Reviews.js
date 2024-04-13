@@ -8,11 +8,21 @@ const reviewSchema = new Schema({
     rating: { type: Number, min: 0, max: 5 }
 });
 
-reviewSchema.pre('save', function(next) {
+reviewSchema.pre('save', async function(next) {
     const review = this;
 
     if (!review.movieId || !review.username || !review.review || !review.rating) {
         return next(new Error('All fields are required'));
+    }
+
+    try {
+        // Check if the movie with the specified movieId exists
+        const movie = await mongoose.model('Movie').findById(review.movieId);
+        if (!movie) {
+            return next(new Error('Movie does not exist'));
+        }
+    } catch (error) {
+        return next(error);
     }
 
     next();
