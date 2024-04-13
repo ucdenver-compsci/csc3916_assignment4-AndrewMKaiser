@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var MovieSchema = require('./Movies');
 
 const reviewSchema = new Schema({
     movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' },
