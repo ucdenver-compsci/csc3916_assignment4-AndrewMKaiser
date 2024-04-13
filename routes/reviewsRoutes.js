@@ -3,6 +3,7 @@ var router = express.Router();
 var Review = require('../models/Reviews');
 var crypto = require("crypto");
 var rp = require('request-promise');
+var authJwtController = require('../auth_jwt');
 
 const GA_TRACKING_ID = process.env.GA_KEY;
 
@@ -57,7 +58,7 @@ router.get('/', function (req, res) {
     }
 });
 
-router.post('/', function(req, res) {
+router.post('/', authJwtController.isAuthenticated, function(req, res) {
     var review = new Review();
     review.movieId = req.body.movieId;
     review.username = req.body.username;
