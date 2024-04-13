@@ -14,17 +14,41 @@ router.get('/', function (req, res) {
 
 
 router.get('/:movieparameter', function (req, res) {
-    Movie.findOne({ title: req.params.movieparameter }, function(err, movie) {
-        if (err) {
-            res.status(500).send(err); // internal server error
-        } else if (!movie) {
-            res.status(404).send({success: false, msg: 'Movie not found.'});
-        } else {
-            res.json(movie);
-        }
-    });
+    if (!req.query.reviews) {
+        Movie.findOne({ _id: req.params.movieparameter }, function(err, movie) {
+            if (!movie) {
+                res.status(404).send({success: false, msg: 'Movie not found.'});
+            } else if (err) {
+                res.status(500).send(err);
+            } else {
+                res.json(movie);
+            }
+        });
+    } else if (req.query.reviews === 'true') {
+        Movie.aggregate([
+            {
+                $match: { _id: mongoose.Types.ObjectId(req.params.movieparameter) }
+            },
+            {
+                $lookup: {
+                    from: "reviews",
+                    localField: "_id",
+                    foreignField: "movieId",
+                    as: "reviews"
+                }
+            }
+        ]).exec(function(err, result) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else {
+        res.status(400).json({ success: false, message: 'Invalid query parameter.' });
+    }
+});
             
-});        
 
 router.post('/', function(req, res) {
     var movie = new Movie();
