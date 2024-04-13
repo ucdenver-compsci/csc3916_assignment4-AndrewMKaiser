@@ -14,6 +14,8 @@ var cors = require('cors');
 var moviesRouter = require('./routes/moviesRoutes');
 var usersRouter = require('./routes/usersRoutes');
 var User = require('./models/Users');
+var reviewsRouter = require('./routes/reviewsRoutes');
+
 
 var app = express();
 app.use(cors());
@@ -102,6 +104,7 @@ router.all('/', function(req, res) {
 app.use('/', router);
 app.use('/movies', moviesRouter);
 app.use('/users', usersRouter);
+app.use('/reviews', reviewsRouter);
 app.listen(process.env.PORT || 8080);
 module.exports = app; // for testing only
 
