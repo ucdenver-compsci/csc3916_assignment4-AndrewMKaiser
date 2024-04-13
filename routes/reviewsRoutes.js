@@ -29,8 +29,7 @@ function trackDimension(category, action, label, value, dimension, metric) {
     return rp(options);
 }
 
-router.get('/', function (req, res) {
-    if (req.query.reviews === 'true') {
+router.get('/', function (req, res) {    if (req.query.reviews === 'true') {
         Review.aggregate([
             {
                 $lookup: {
@@ -48,13 +47,7 @@ router.get('/', function (req, res) {
             }
         });
     } else {
-        Review.find({}, function(err, reviews) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(reviews);
-            }
-        });
+        res.status(400).json({ success: false, message: 'Invalid query parameter.' });
     }
 });
 
