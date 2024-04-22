@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Movie = require('../models/Movies');
+var mongoose = require('mongoose');
 
 router.get('/', function (req, res) {
     Movie.find({}, function(err, movies) {
@@ -15,7 +16,7 @@ router.get('/', function (req, res) {
 
 router.get('/:movieparameter', function (req, res) {
     if (!req.query.reviews) {
-        const id = mongoose.ObjectId(req.params.movieparameter);
+        const id = mongoose.Types.ObjectId(req.params.movieparameter);
         Movie.findOne({ _id: id }, function(err, movie) {
             if (!movie) {
                 res.status(404).send({success: false, msg: 'Movie not found.'});
