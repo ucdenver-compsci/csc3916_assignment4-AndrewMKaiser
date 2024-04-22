@@ -16,8 +16,8 @@ router.get('/', function (req, res) {
 
 router.get('/:movieparameter', function (req, res) {
     if (!req.query.reviews) {
-        if(!req.body.movieId || !req.body.username || !req.body.review || !req.body.rating) 
-            res.status(404).send({success: false, msg: 'Ensure all fields are entered.'});
+        // if(!req.body.movieId || !req.body.username || !req.body.review || !req.body.rating) 
+        //     res.status(404).send({success: false, msg: 'Ensure all fields are entered.'});
         const id = mongoose.Types.ObjectId(req.params.movieparameter);
         Movie.findOne({ _id: id }, function(err, movie) {
             if (!movie) {
