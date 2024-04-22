@@ -15,7 +15,8 @@ router.get('/', function (req, res) {
 
 router.get('/:movieparameter', function (req, res) {
     if (!req.query.reviews) {
-        Movie.findOne({ _id: req.params.movieparameter }, function(err, movie) {
+        const id = mongoose.ObjectId(req.params.movieparameter);
+        Movie.findOne({ _id: id }, function(err, movie) {
             if (!movie) {
                 res.status(404).send({success: false, msg: 'Movie not found.'});
             } else if (err) {
@@ -27,7 +28,7 @@ router.get('/:movieparameter', function (req, res) {
     } else if (req.query.reviews === 'true') {
         Movie.aggregate([
             {
-                $match: { _id: mongoose.Types.ObjectId(req.params.movieparameter) }
+                $match: { _id: id }
             },
             {
                 $lookup: {
