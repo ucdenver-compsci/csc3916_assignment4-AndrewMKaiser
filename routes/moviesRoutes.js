@@ -19,6 +19,8 @@ router.get('/:movieparameter', function (req, res) {
         const id = mongoose.Types.ObjectId(req.params.movieparameter);
         Movie.findOne({ _id: id }, function(err, movie) {
             if (!movie) {
+                if(!req.body.movieId || !req.body.username || !req.body.review || !req.body.rating) 
+                    res.status(404).send({success: false, msg: 'Ensure all fields are entered.'});
                 res.status(404).send({success: false, msg: 'Movie not found.'});
             } else if (err) {
                 res.status(500).send(err);
